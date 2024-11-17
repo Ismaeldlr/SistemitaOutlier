@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cartas</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Tasks</h1>
+        <img src="logo.png" alt="Logo" id="logo">
+    </header>
+
+    <main>
+        <section id="add-task">
+            <h2>Add Task</h2>
+            <form id="task-form">
+                <label for="permalink">Permalink:</label>
+                <input type="text" id="permalink" name="permalink" required>
+
+                <label for="id1">ID1:</label>
+                <input type="text" id="id1" name="id1" required>
+
+                <label for="id2">ID2:</label>
+                <input type="text" id="id2" name="id2" required>
+
+                <label for="justification">Justification:</label>
+                <textarea id="justification" name="justification" rows="4" required></textarea>
+
+                <button type="submit">Add</button>
+            </form>
+        </section>
+
+        <section id="task-list">
+            <div id="task-header">
+                <h2>Tasks</h2>
+                <p id="task-counter">Tasks stored: 0</p>
+            </div>
+            <ul id="tasks">
+                <!-- Tasks will be dynamically added here -->
+            </ul>
+        </section>
+    </main>
+
+    <script src="scripts/script.js"></script>
+</body>
+</html>
