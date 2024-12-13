@@ -1,57 +1,57 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const mysql = require('mysql2');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const filePath = path.join(require('os').homedir(), 'Desktop', 'tasks.txt');
-const backupFilePath = path.join(require('os').homedir(), 'Desktop', 'backup.txt');
+// MySQL connection
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root', // Replace with your MySQL username
+    password: '', // Replace with your MySQL password
+    database: 'tasks_db',
+});
 
-// Ensure backup file exists
-if (!fs.existsSync(backupFilePath)) {
-    fs.writeFileSync(backupFilePath, '', 'utf-8');
-}
+// Ensure database connection
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err);
+        process.exit(1);
+    }
+    console.log('Connected to MySQL database.');
+});
 
 // Endpoint to get all tasks
 app.get('/tasks', (req, res) => {
-    if (!fs.existsSync(filePath)) {
-        res.json([]);
-        return;
-    }
-    const tasksData = fs.readFileSync(filePath, 'utf-8');
-    const tasks = tasksData.split('---').filter(task => task.trim() !== '');
-    res.json(tasks);
+    const sql = 'SELECT * FROM tasks WHERE status = "active"';
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to fetch tasks.' });
+        }
+        res.json(results);
+    });
 });
 
 // Endpoint to add a new task
 app.post('/tasks', (req, res) => {
     const { permalink, id1, id2, justification } = req.body;
 
-    if (permalink && id1 && id2 && justification) {
-        const newTask = `
-${permalink}
-${id1}
-${id2}
-${justification}
----
-        `.trim();
-
-        // Append task to tasks.txt
-        fs.appendFileSync(filePath, `\n${newTask}`, 'utf-8');
-
-        // Append task to backup.txt
-        fs.appendFileSync(backupFilePath, `\n${newTask}`, 'utf-8');
-
-        res.status(201).json({ message: 'Task added and backed up successfully!' });
+    if (permalink && justification) {
+        const sql = 'INSERT INTO tasks (permalink, id1, id2, justification) VALUES (?, ?, ?, ?)';
+        db.query(sql, [permalink, id1 || null, id2 || null, justification], (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to add task.' });
+            }
+            res.status(201).json({ message: 'Task added successfully!' });
+        });
     } else {
-        res.status(400).json({ error: 'All fields are required.' });
+        res.status(400).json({ error: 'Permalink and justification are required.' });
     }
 });
 
-// Endpoint to delete a task (mark as "Not Available" in backup)
+// Endpoint to delete a task (mark as "Not Available")
 app.delete('/tasks', (req, res) => {
     const { permalink } = req.body;
 
@@ -59,39 +59,16 @@ app.delete('/tasks', (req, res) => {
         return res.status(400).json({ error: 'Permalink is required.' });
     }
 
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ error: 'Task file not found.' });
-    }
-
-    const tasksData = fs.readFileSync(filePath, 'utf-8');
-    const tasks = tasksData.split('---').filter(task => task.trim() !== '');
-
-    // Find the task to delete
-    const taskToDelete = tasks.find(task => task.includes(permalink));
-
-    if (!taskToDelete) {
-        return res.status(404).json({ error: 'Task not found.' });
-    }
-
-    // Mark the task as "Not Available" in backup.txt
-    const backupData = fs.readFileSync(backupFilePath, 'utf-8');
-    const updatedBackup = backupData
-        .split('---')
-        .map(task => {
-            if (task.includes(permalink) && !task.includes('Not Available')) {
-                return `${task.trim()}\nNot Available`;
-            }
-            return task.trim();
-        })
-        .join('\n---\n');
-    fs.writeFileSync(backupFilePath, updatedBackup.trim() + '\n---\n', 'utf-8');
-
-    // Remove the task from tasks.txt
-    const updatedTasks = tasks.filter(task => !task.includes(permalink));
-    const newData = updatedTasks.join('\n---\n');
-    fs.writeFileSync(filePath, newData.trim() + '\n---\n', 'utf-8');
-
-    res.status(200).json({ message: 'Task deleted and marked as Not Available in backup.' });
+    const sql = 'UPDATE tasks SET status = "not available" WHERE permalink = ?';
+    db.query(sql, [permalink], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to delete task.' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Task not found.' });
+        }
+        res.json({ message: 'Task marked as Not Available.' });
+    });
 });
 
 const PORT = 3000;

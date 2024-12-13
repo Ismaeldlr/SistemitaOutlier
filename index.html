@@ -3,32 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Cartas</title>
+    <title>Tasks</title>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
     <header>
-        <h1>Tasks</h1>
-        <img src="logo.png" alt="Logo" id="logo">
+        <div id="header-container">
+            <nav id="header-nav">
+                <ul id="nav-bar">
+                    <li><a href="index.html" class="nav-btn active">Tasks</a></li>
+                    <li><a href="workshop.html" class="nav-btn">Workshop</a></li>
+                </ul>
+            </nav>
+            <div id="header-logo">
+                <img src="assets/logo.png" alt="Logo" id="logo">
+            </div>
+            <div id="header-user">
+                <button class="user-btn">User</button>
+            </div>
+        </div>
     </header>
 
     <main>
         <section id="add-task">
-            <h2>Add Task</h2>
+            <div class="add-task-header">
+                <h2>Add Task</h2>
+                <div class="toggle-container">
+                    <button id="toggle-normal" class="toggle-btn active">Normal</button>
+                    <button id="toggle-reject" class="toggle-btn">Reject</button>
+                </div>
+            </div>
             <form id="task-form">
                 <label for="permalink">Permalink:</label>
-                <input type="text" id="permalink" name="permalink" required>
+                <input type="text" id="permalink" name="permalink" required autocomplete="off">
 
-                <label for="id1">ID1:</label>
-                <input type="text" id="id1" name="id1" required>
+                <div id="normal-fields">
+                    <label for="id1">ID1:</label>
+                    <input type="text" id="id1" name="id1" required autocomplete="off">
 
-                <label for="id2">ID2:</label>
-                <input type="text" id="id2" name="id2" required>
+                    <label for="id2">ID2:</label>
+                    <input type="text" id="id2" name="id2" required autocomplete="off">
+                </div>
 
                 <label for="justification">Justification:</label>
-                <textarea id="justification" name="justification" rows="4" required></textarea>
+                <textarea id="justification" name="justification" rows="4" required autocomplete="off"></textarea>
 
-                <button type="submit">Add</button>
+                <button class="normalbtn" type="submit">Add</button>
             </form>
         </section>
 
@@ -44,5 +64,6 @@
     </main>
 
     <script src="scripts/script.js"></script>
+
 </body>
 </html>

@@ -1,3 +1,4 @@
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,19 +8,66 @@ body {
     color: #333;
 }
 
-/* Header styles */
+/* Header Styles */
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: #007BFF;
     color: white;
     padding: 15px 20px;
 }
 
-header h1 {
+#header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#header-nav {
+    display: flex;
+    align-items: center;
+}
+
+#nav-bar {
+    list-style: none;
+    display: flex;
+    gap: 10px;
     margin: 0;
-    font-size: 1.5rem;
+    padding: 0;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-decoration: none;
+    /* Removes the underline */
+    display: inline-block;
+}
+
+.nav-btn.active {
+    background-color: #0056b3;
+    border-radius: 5px;
+}
+
+.nav-btn:hover {
+    background-color: #004099;
+    border-radius: 5px;
+}
+
+#header-logo {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    /* Center-align logo */
+    text-align: center;
 }
 
 #logo {
@@ -27,21 +75,89 @@ header h1 {
     width: auto;
 }
 
-/* Main layout */
+#header-user {
+    display: flex;
+    align-items: center;
+}
+
+.user-btn {
+    background-color: white;
+    color: #007BFF;
+    border: 2px solid white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-btn:hover {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Main Layout */
 main {
     display: flex;
+    /* Align child sections horizontally */
     flex-direction: row;
+    /* Horizontal layout */
+    justify-content: space-between;
+    /* Space between columns */
     gap: 20px;
+    /* Spacing between sections */
     padding: 20px;
+    max-width: 95%;
+    /* Restrict main content width */
+    margin: 0 auto;
+    /* Center-align main content */
 }
 
 /* Add Task Section */
 #add-task {
     flex: 1;
+    /* Occupy 1 part of the row */
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.add-task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-container {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    background-color: #f4f4f4;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.toggle-btn.active {
+    background-color: #007BFF;
+    color: white;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+    color: white;
 }
 
 #add-task h2 {
@@ -54,17 +170,24 @@ label {
     font-weight: bold;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
     width: 95%;
     padding: 10px;
-    margin-bottom: 15px;
+
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
 }
 
+input {
+    margin-bottom: 15px;
+}
+
 textarea {
     resize: vertical;
+    margin-bottom: 15px;
 }
 
 button {
@@ -79,9 +202,10 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Task Section */
+/* Task List Section */
 #task-list {
     flex: 2;
+    /* Occupy 2 parts of the row */
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -129,7 +253,8 @@ button:hover {
     margin-top: 10px;
 }
 
-.copy-btn, .delete-btn {
+.copy-btn,
+.delete-btn {
     width: 40%;
     padding: 10px;
     border-radius: 5px;
@@ -151,9 +276,27 @@ button:hover {
 .delete-btn:hover {
     background-color: #c82333;
 }
-/* Responsive design */
+
+/* Responsive Design */
 @media (max-width: 768px) {
     main {
         flex-direction: column;
+        /* Stack sections vertically on small screens */
     }
+
+    #add-task,
+    #task-list {
+        width: 100%;
+        /* Ensure sections span the full width */
+    }
+}
+
+/* Section Visibility */
+.visible {
+    display: flex;
+    /* Ensures `Tasks` section retains flex layout */
+}
+
+.hidden {
+    display: none;
 }

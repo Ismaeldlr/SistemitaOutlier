@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop</title>
+    <link rel="stylesheet" href="styles/workshop.css">
+</head>
+
+<body>
+    <header>
+        <div id="header-container">
+            <nav id="header-nav">
+                <ul id="nav-bar">
+                    <li><a href="index.html" class="nav-btn">Tasks</a></li>
+                    <li><a href="workshop.html" class="nav-btn active">Workshop</a></li>
+                </ul>
+            </nav>
+            <div id="header-logo">
+                <img src="assets/logo.png" alt="Logo" id="logo">
+            </div>
+            <div id="header-user">
+                <button class="user-btn">User</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="workshop-container">
+        <!-- Left Column -->
+        <div id="left-column">
+            <!-- Instructions Section -->
+            <section id="instructions">
+                <h2>Instructions</h2>
+                <p id="instructions-paragraph">Instruction 1, Instruction 2, Instruction 3</p>
+                <button id="set-instructions-btn">Set Instructions</button>
+            </section>
+    
+            <!-- Prompt Maker Section -->
+            <section id="prompt-maker">
+                <h2>Prompt Maker</h2>
+                <div id="prompt-maker-container">
+                    <!-- Left: Input Fields -->
+                    <div id="input-fields">
+                        <form id="task-form">
+                            <label for="permalink">Permalink:</label>
+                            <input type="text" id="permalink" name="permalink" required autocomplete="off">
+    
+                            <label for="id1">ID1:</label>
+                            <input type="text" id="id1" name="id1" required autocomplete="off">
+    
+                            <label for="id2">ID2:</label>
+                            <input type="text" id="id2" name="id2" required autocomplete="off">
+    
+                            <label for="justification">Justification:</label>
+                            <input type="text" id="justification" name="justification" required autocomplete="off">
+                        </form>
+                    </div>
+    
+                    <!-- Right: Response Text Areas -->
+                    <div id="response-areas">
+                        <label for="response0">Latest prompt:</label>
+                        <textarea id="response0" name="response0" rows="4" required></textarea>
+    
+                        <label for="response1">Response 1:</label>
+                        <textarea id="response1" name="response1" rows="4" required></textarea>
+    
+                        <label for="response2">Response 2:</label>
+                        <textarea id="response2" name="response2" rows="4" required></textarea>
+                    </div>
+                </div>
+                
+                <div id="prompt-buttons">
+                    <button type="submit" id="add-prompt-btn">Add</button>
+                    <button type="button" id="create-prompt-btn">Create Prompt</button>
+                </div>
+            </section>
+        </div>
+    
+        <!-- Right Column -->
+        <section id="prompt-section">
+            <h2>Prompt</h2>
+            <div id="prompt-actions">
+                <button class="action-btn" id="copy-prompt-btn">Copy</button>
+                <button class="action-btn" id="delete-prompt-btn">Delete</button>
+            </div>
+            <div id="prompt-display">
+                <p>Prompt will be displayed here...</p>
+            </div>
+        </section>
+    </main>
+    
+
+    <!-- Popup Window -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Set Instructions</h2>
+            <textarea id="instructions-textarea" rows="10" cols="50"></textarea>
+            <button id="save-instructions-btn">Save</button>
+        </div>
+    </div>
+    <script src="scripts/workshop.js"></script>
+</body>
+
+</html>

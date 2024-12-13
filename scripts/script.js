@@ -1,50 +1,27 @@
-// Función para eliminar una tarea del archivo
-async function deleteTask(permalink) {
-    try {
-        const response = await fetch(`http://localhost:3000/tasks`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ permalink }),
-        });
+// ------------------------------------------------------------
+//                          Tasks Tab
+// ------------------------------------------------------------
 
-        if (response.ok) {
-            alert('Task deleted successfully!');
-            fetchTasks(); // Refresca la lista de tareas
-        } else {
-            alert('Failed to delete task.');
-        }
-    } catch (error) {
-        console.error('Error deleting task:', error);
-    }
-}
-
-// Función para obtener y mostrar las tareas desde el backend
 async function fetchTasks() {
     try {
         const response = await fetch('http://localhost:3000/tasks');
         const tasks = await response.json();
 
         const taskList = document.getElementById('tasks');
-        const taskCounter = document.getElementById('task-counter');
-        taskList.innerHTML = ''; // Limpia las tareas existentes
+        const taskCounter = document.getElementById('task-counter'); // Get the counter element
 
-        // Actualiza el contador de tareas
+        taskList.innerHTML = ''; // Clear existing tasks
+
+        // Update the task counter
         taskCounter.textContent = `Tasks stored: ${tasks.length}`;
 
         tasks.forEach(task => {
             const taskDiv = document.createElement('div');
             taskDiv.classList.add('task');
 
-            // Divide cada tarea en líneas para estructurarla
-            const lines = task.split('\n').filter(line => line.trim() !== '');
-            const permalink = lines[0];
-            const id1 = lines[1];
-            const id2 = lines[2];
-            const justification = lines.slice(3).join(' '); // Combina el resto como justificación
+            // Assuming task is an object with these properties
+            const { permalink, id1, id2, justification } = task;
 
-            // Crea el HTML estructurado para cada tarea con botones de copiar y eliminar
             taskDiv.innerHTML = `
                 <p><strong>Permalink:</strong> <a href="${permalink}" target="_blank">${permalink}</a></p>
                 <p><strong>ID1:</strong> ${id1}</p>
@@ -56,13 +33,13 @@ async function fetchTasks() {
                 </div>
             `;
 
-            // Agrega funcionalidad de copiar al botón
+            // Add event listener for the "Copy" button
             const copyButton = taskDiv.querySelector('.copy-btn');
             copyButton.addEventListener('click', () => {
                 copyToClipboard(permalink, id1, id2, justification);
             });
 
-            // Agrega funcionalidad de eliminar al botón
+            // Add event listener for the "Delete" button
             const deleteButton = taskDiv.querySelector('.delete-btn');
             deleteButton.addEventListener('click', () => {
                 if (confirm('Are you sure you want to delete this task?')) {
@@ -78,23 +55,6 @@ async function fetchTasks() {
 }
 
 
-// Función para copiar los datos al portapapeles como elementos separados
-function copyToClipboard(link, num1, num2, justificacion) {
-    const values = [link, num1, num2, justificacion];
-    values.forEach((value, index) => {
-        setTimeout(() => {
-            navigator.clipboard.writeText(value).then(() => {
-                if (index === values.length - 1) {
-                    alert("Datos copiados al portapapeles como elementos separados.");
-                }
-            }).catch((err) => {
-                console.error("Error al copiar al portapapeles: ", err);
-            });
-        }, index * 500);
-    });
-}
-
-// Función para agregar una nueva tarea
 async function addTask(permalink, id1, id2, justification) {
     try {
         const response = await fetch('http://localhost:3000/tasks', {
@@ -108,7 +68,7 @@ async function addTask(permalink, id1, id2, justification) {
         if (response.ok) {
             alert('Task added successfully!');
             document.getElementById('task-form').reset();
-            fetchTasks(); // Refresca la lista de tareas
+            fetchTasks(); // Refresh tasks
         } else {
             alert('Failed to add task.');
         }
@@ -117,23 +77,95 @@ async function addTask(permalink, id1, id2, justification) {
     }
 }
 
-// Maneja la submit del formulario para agregar una nueva tarea
-document.getElementById('task-form').addEventListener('submit', (e) => {
-    e.preventDefault();
+async function deleteTask(permalink) {
+    try {
+        const response = await fetch('http://localhost:3000/tasks', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ permalink }),
+        });
 
-    const permalink = document.getElementById('permalink').value;
-    const id1 = document.getElementById('id1').value;
-    const id2 = document.getElementById('id2').value;
-    const justification = document.getElementById('justification').value;
-
-    if (permalink && id1 && id2 && justification) {
-        addTask(permalink, id1, id2, justification);
-    } else {
-        alert('Please fill in all fields!');
+        if (response.ok) {
+            alert('Task deleted successfully!');
+            fetchTasks(); // Refresh tasks
+        } else {
+            alert('Failed to delete task.');
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
     }
+}
+
+function copyToClipboard(link, num1, num2, justification) {
+    const values = [link, num1, num2, justification];
+    let copiedCount = 0;
+
+    values.forEach((value, index) => {
+        setTimeout(() => {
+            navigator.clipboard.writeText(value).then(() => {
+                copiedCount++;
+                if (copiedCount === values.length) {
+                    alert("Datos copiados al portapapeles como elementos separados.");
+                }
+            }).catch((err) => {
+                console.error("Error al copiar al portapapeles: ", err);
+            });
+        }, index * 500);
+    });
+}
+
+const toggleNormal = document.getElementById('toggle-normal');
+const toggleReject = document.getElementById('toggle-reject');
+const normalFields = document.getElementById('normal-fields');
+const form = document.getElementById('task-form');
+let isRejectMode = false;
+
+// Toggle between Normal and Reject modes
+toggleNormal.addEventListener('click', () => {
+    isRejectMode = false;
+    toggleNormal.classList.add('active');
+    toggleReject.classList.remove('active');
+    normalFields.style.display = 'block'; // Show ID1 and ID2 fields
+    document.getElementById('id1').disabled = false;
+    document.getElementById('id2').disabled = false;
 });
 
-// Carga las tareas al cargar la página
+toggleReject.addEventListener('click', () => {
+    isRejectMode = true;
+    toggleReject.classList.add('active');
+    toggleNormal.classList.remove('active');
+    normalFields.style.display = 'none'; // Hide ID1 and ID2 fields
+    document.getElementById('id1').disabled = true;
+    document.getElementById('id2').disabled = true;
+});
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetchTasks();
+    // Run only on the Tasks page
+    if (document.body.contains(document.getElementById('task-form'))) {
+        fetchTasks();
+
+        const form = document.getElementById('task-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const permalink = document.getElementById('permalink').value;
+            const justification = document.getElementById('justification').value;
+
+            if (isRejectMode) {
+                // Reject mode: Exclude ID1 and ID2
+                addTask(permalink, 'Not Applicable', 'Not Applicable', justification);
+            } else {
+                const id1 = document.getElementById('id1').value;
+                const id2 = document.getElementById('id2').value;
+
+                if (id1 && id2) {
+                    addTask(permalink, id1, id2, justification);
+                } else {
+                    alert('Please fill in all fields!');
+                }
+            }
+        });
+    }
 });
