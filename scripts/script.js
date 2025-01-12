@@ -31,12 +31,58 @@ async function fetchTasks() {
                     <button class="copy-btn">Copy</button>
                     <button class="delete-btn">Delete</button>
                 </div>
+                <div class="task-buttons">
+                    <button class="permalink-btn">Permalink</button>
+                    <button class="id1-btn">ID1</button>
+                    <button class="id2-btn">ID2</button>
+                    <button class="justification-btn">Justification</button>
+                </div>
             `;
 
             // Add event listener for the "Copy" button
             const copyButton = taskDiv.querySelector('.copy-btn');
             copyButton.addEventListener('click', () => {
                 copyToClipboard(permalink, id1, id2, justification);
+            });
+
+            //Copy permalink
+            const copyPermalink = taskDiv.querySelector('.permalink-btn');
+            copyPermalink.addEventListener('click', () => {
+                navigator.clipboard.writeText(permalink).then(() => {
+                    alert("Permalink copiado al portapapeles.");
+                }).catch((err) => {
+                    console.error("Error al copiar al portapapeles: ", err);
+                });
+            });
+
+            //Copy ID1
+            const copyId1 = taskDiv.querySelector('.id1-btn');
+            copyId1.addEventListener('click', () => {
+                navigator.clipboard.writeText(id1).then(() => {
+                    alert("ID1 copiado al portapapeles.");
+                }).catch((err) => {
+                    console.error("Error al copiar al portapapeles: ", err);
+                });
+            });
+
+            //Copy ID2
+            const copyId2 = taskDiv.querySelector('.id2-btn');
+            copyId2.addEventListener('click', () => {
+                navigator.clipboard.writeText(id2).then(() => {
+                    alert("ID2 copiado al portapapeles.");
+                }).catch((err) => {
+                    console.error("Error al copiar al portapapeles: ", err);
+                });
+            });
+
+            //Copy Justification
+            const copyJustification = taskDiv.querySelector('.justification-btn');
+            copyJustification.addEventListener('click', () => {
+                navigator.clipboard.writeText(justification).then(() => {
+                    alert("Justificación copiada al portapapeles.");
+                }).catch((err) => {
+                    console.error("Error al copiar al portapapeles: ", err);
+                });
             });
 
             // Add event listener for the "Delete" button

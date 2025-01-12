@@ -232,6 +232,10 @@ button:hover {
     margin-bottom: 15px;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .task p {
@@ -254,13 +258,18 @@ button:hover {
 }
 
 .copy-btn,
-.delete-btn {
+.delete-btn,
+.permalink-btn,
+.id1-btn,
+.id2-btn,
+.justification-btn {
     width: 40%;
     padding: 10px;
     border-radius: 5px;
     font-size: 0.9rem;
     text-align: center;
     cursor: pointer;
+    margin: 0px 10px;
 }
 
 .copy-btn:hover {
@@ -273,10 +282,19 @@ button:hover {
     border: none;
 }
 
-.delete-btn:hover {
-    background-color: #c82333;
+.permalink-btn,
+.id1-btn,
+.id2-btn,
+.justification-btn {
+    background-color: #23c839;
 }
 
+.permalink-btn:hover,
+.id1-btn:hover,
+.id2-btn:hover,
+.justification-btn:hover {
+    background-color: #1e9e33ad;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     main {
