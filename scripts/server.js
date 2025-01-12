@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -68,6 +70,38 @@ app.delete('/tasks', (req, res) => {
             return res.status(404).json({ error: 'Task not found.' });
         }
         res.json({ message: 'Task marked as Not Available.' });
+    });
+});
+
+// File path for instructions.json
+const instructionsFilePath = path.join(__dirname, 'instructions.json');
+
+// Endpoint to get all instructions
+app.get('/instructions', (req, res) => {
+    fs.readFile(instructionsFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading instructions file:', err);
+            return res.status(500).json({ error: 'Failed to fetch instructions.' });
+        }
+        const instructions = JSON.parse(data || '[]');
+        res.json(instructions);
+    });
+});
+
+// Endpoint to save instructions
+app.post('/instructions', (req, res) => {
+    const { instructions } = req.body;
+
+    if (!Array.isArray(instructions)) {
+        return res.status(400).json({ error: 'Instructions should be an array.' });
+    }
+
+    fs.writeFile(instructionsFilePath, JSON.stringify(instructions, null, 2), 'utf8', (err) => {
+        if (err) {
+            console.error('Error writing instructions file:', err);
+            return res.status(500).json({ error: 'Failed to save instructions.' });
+        }
+        res.json({ message: 'Instructions saved successfully!' });
     });
 });
 

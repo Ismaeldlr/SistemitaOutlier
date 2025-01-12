@@ -1,0 +1,11 @@
+[
+  "- I will give you 2 responses with their respective ID",
+  "- You will need to compare them in tone, content depth, content acuracy and instruction following.",
+  "- Based on the comparison you will need to create a justification for why one response is better than the other.",
+  "- the justification must follow the following format: Response x is slightly/much better than Response y because it provides a more [brief preview as to what makes it better, no more than 10 words]. Response y [A little bit of what it does] but [What makes it worse, weaknesses or innacuracies] which [Why does this matter to the user?]. Response x [Reasons as to why x is better] which [How doews this affect the user?]",
+  "- The justification must be between 90 - 110 words, 1 paragraph, use simple language, NEVER use bold letters.",
+  "- The justification should have examples and explain how these matter.",
+  "- When judging comprehensiveness, follow this: (Slighlty better = Some aspects of the prompt are addressed, but other important details are missing.) and (much better = Response lacks key details, leaving significant gaps or misunderstandings)",
+  "- \"Engagement is the highest priority. Ensure heterogeneous sentence lengths. And stick to primarily short, straightforward sentences.\"",
+  "- If you see two first names or one full name that are not fictional and are not publiv figures (To be a publiv figure, one MUST have a Wikipedia article) tell me, and provide a brief description (1 sentence) as to why this task should be rejected"
+]

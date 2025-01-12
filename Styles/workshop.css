@@ -103,27 +103,55 @@ header {
     flex-direction: column;
 }
 
-/* Instructions Section */
-#instructions {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex: none; /* Prevent height from being influenced by sibling elements */
+/* Instruction Item */
+.instruction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-#instructions h2 {
-    margin-top: 0;
+.instruction-item input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
-#set-instructions-btn {
-    margin-top: 10px;
+.instruction-item button {
     background-color: #007BFF;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.instruction-item button:hover {
+    background-color: #0056b3;
+}
+
+/* Add and Save Buttons */
+#add-instruction-btn,
+#save-instructions-btn,
+#set-instructions-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#add-instruction-btn:hover,
+#save-instructions-btn:hover {
+    background-color: #0056b3;
 }
 
 /* Prompt Maker Section */
@@ -214,37 +242,39 @@ textarea {
 .popup {
     display: none; /* Hidden by default */
     position: fixed;
-    z-index: 1;
+    z-index: 100; /* Ensure it is above all other elements */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
 }
 
 .popup-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color: #fff;
+    margin: 10% auto; /* Center vertically and horizontally */
     padding: 20px;
-    border: 1px solid #888;
     width: 80%;
     max-width: 600px;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* For close button positioning */
 }
 
+/* Close Button */
 .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     color: #aaa;
-    float: right;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
+    cursor: pointer;
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close-btn:hover {
+    color: #333;
 }
 
 #instructions-textarea {

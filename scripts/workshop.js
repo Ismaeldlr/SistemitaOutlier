@@ -2,38 +2,95 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('popup');
     const setInstructionsBtn = document.getElementById('set-instructions-btn');
     const closeBtn = document.querySelector('.close-btn');
-    const saveInstructionsBtn = document.getElementById('save-instructions-btn');
-    const instructionsParagraph = document.getElementById('instructions-paragraph');
     const instructionsTextarea = document.getElementById('instructions-textarea');
     const createPromptBtn = document.getElementById('create-prompt-btn');
     const promptDisplay = document.getElementById('prompt-display');
     const copyPromptBtn = document.getElementById('copy-prompt-btn');
     const deletePromptBtn = document.getElementById('delete-prompt-btn');
     const addPromptBtn = document.getElementById('add-prompt-btn');
+    const addInstructionBtn = document.getElementById('add-instruction-btn');
+    const saveInstructionsBtn = document.getElementById('save-instructions-btn');
+    const instructionsContainer = document.getElementById('instructions-container');
+    const instructionsParagraph = document.getElementById('instructions-paragraph');
 
-    // Show the popup when the "Set Instructions" button is clicked
+
+    // Fetch existing instructions
+    async function fetchInstructions() {
+        try {
+            const response = await fetch('http://localhost:3000/instructions');
+            instructions = await response.json();
+            instructionsParagraph.innerHTML = instructions.join('<br>');
+        } catch (error) {
+            console.error('Error fetching instructions:', error);
+        }
+    }
+
+    // Render instructions dynamically
+    function renderInstructions() {
+        instructionsContainer.innerHTML = '';
+        instructions.forEach((instruction, index) => {
+            const div = document.createElement('div');
+            div.classList.add('instruction-item');
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = instruction;
+            input.addEventListener('input', (e) => {
+                instructions[index] = e.target.value;
+            });
+            div.appendChild(input);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.addEventListener('click', () => {
+                instructions.splice(index, 1);
+                renderInstructions();
+            });
+            div.appendChild(deleteBtn);
+
+            instructionsContainer.appendChild(div);
+        });
+    }
+// Show the popup
     setInstructionsBtn.addEventListener('click', () => {
         popup.style.display = 'block';
+        renderInstructions();
     });
 
-    // Close the popup when the close button is clicked
+    // Close the popup
     closeBtn.addEventListener('click', () => {
         popup.style.display = 'none';
     });
 
-    // Close the popup when clicking outside of the popup content
-    window.addEventListener('click', (event) => {
-        if (event.target === popup) {
-            popup.style.display = 'none';
+    // Add a new instruction
+    addInstructionBtn.addEventListener('click', () => {
+        instructions.push('');
+        renderInstructions();
+    });
+
+    // Save instructions
+    saveInstructionsBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://localhost:3000/instructions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ instructions }),
+            });
+
+            if (response.ok) {
+                instructionsParagraph.textContent = instructions.join(', ');
+                popup.style.display = 'none';
+                alert('Instructions saved successfully!');
+            } else {
+                alert('Failed to save instructions.');
+            }
+        } catch (error) {
+            console.error('Error saving instructions:', error);
         }
     });
 
-    // Save instructions and update the paragraph
-    saveInstructionsBtn.addEventListener('click', () => {
-        const instructions = instructionsTextarea.value;
-        instructionsParagraph.textContent = instructions;
-        popup.style.display = 'none';
-    });
+    // Load initial instructions
+    fetchInstructions();
 
     // Create prompt when the "Create Prompt" button is clicked
     createPromptBtn.addEventListener('click', () => {
